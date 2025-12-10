@@ -23,8 +23,8 @@ const InfoPanel = ({ currentStep, isOpen, toggle, setStep }) => {
             desc: 'Simulating the asynchronous nature of ad networks. A notification brings the user back when meaningful data is available.'
         },
         'final-dashboard': {
-            title: 'Step 6: Analysis',
-            desc: 'The loop is closed. The user is back in the platform viewing populated insights.'
+            title: 'Step 5: Analysis',
+            desc: 'The loop is closed. The user is back in the platform viewing populated insights.\n\n❓ Open Question: Should we add a temporary banner (that disappears after a set time) indicating that data takes time to stabilize?'
         }
     };
 
