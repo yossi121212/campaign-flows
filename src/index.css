@@ -1,0 +1,84 @@
+:root {
+    --bg-dark: #f8fafc;
+    /* Light gray background */
+    --bg-card: #ffffff;
+    /* White card */
+    --accent-primary: #8b5cf6;
+    /* Purple active state from screenshot */
+    --accent-secondary: #a78bfa;
+    --text-main: #0f172a;
+    /* Dark text */
+    --text-muted: #64748b;
+    --glass-bg: rgba(255, 255, 255, 0.8);
+    --glass-border: rgba(0, 0, 0, 0.05);
+    /* Subtle dark border */
+    --font-family: 'Inter', system-ui, -apple-system, sans-serif;
+}
+
+body {
+    margin: 0;
+    font-family: var(--font-family);
+    background-color: var(--bg-dark);
+    color: var(--text-main);
+    -webkit-font-smoothing: antialiased;
+}
+
+button {
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.glass-panel {
+    background: var(--bg-card);
+    border: 1px solid var(--glass-border);
+    border-radius: 12px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.btn-primary {
+    background: var(--accent-primary);
+    border: none;
+    padding: 0.75rem 1.5rem;
+    color: white;
+    font-weight: 500;
+    border-radius: 6px;
+    font-size: 0.9rem;
+    box-shadow: 0 2px 4px rgba(139, 92, 246, 0.2);
+}
+
+.btn-primary:hover {
+    background: #7c3aed;
+    transform: translateY(-1px);
+}
+
+.btn-secondary {
+    background: white;
+    border: 1px solid #e2e8f0;
+    padding: 0.75rem 1.5rem;
+    color: var(--text-muted);
+    font-weight: 500;
+    border-radius: 6px;
+    font-size: 0.9rem;
+}
+
+.btn-secondary:hover {
+    background: #f1f5f9;
+    color: var(--text-main);
+}
+
+.input-field {
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+    color: var(--text-main);
+    padding: 0.6rem;
+    border-radius: 6px;
+    width: 100%;
+    box-sizing: border-box;
+    font-size: 0.9rem;
+}
+
+.input-field:focus {
+    outline: none;
+    border-color: var(--accent-primary);
+    background: white;
+}

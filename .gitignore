@@ -1,0 +1,11 @@
+node_modules
+.DS_Store
+dist
+.env
+.vercel
+
+# Recovery artifacts
+source_recovery_tool/
+src_backup_before_recovery/
+out/
+download-log.txt
