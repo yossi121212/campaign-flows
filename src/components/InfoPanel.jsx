@@ -3,28 +3,44 @@ import { ChevronRight, ChevronLeft, Info } from 'lucide-react';
 const InfoPanel = ({ currentStep, isOpen, toggle, setStep }) => {
     const stepInfo = {
         'internal-start': {
-            title: 'Step 1: Campaign Setup',
+            title: 'Step 1: Post Launch Start',
             desc: 'The user begins in our internal platform. They have defined targeting and goals and are now directed to the external ad network (Twitter/X) to add creative assets.'
         },
         'twitter-launch': {
-            title: 'Step 2: External Launch',
+            title: 'Step 2: Add Creative',
             desc: 'The specific creative matching the campaign parameters is synchronized to the Twitter Ads Manager. The user reviews and launches.'
         },
         'twitter-table': {
-            title: 'End of Launch Process on Twitter',
+            title: 'Step 3: Campaigns Table',
             desc: 'The launch process on Twitter is now complete. Based on typical user behavior, we anticipate one of the following flows to occur next:'
         },
         'campaign-page': {
-            title: 'Step 4: Waiting State',
+            title: 'Step 4: Waiting (24h)',
             desc: 'If the user returns to the specific campaign page, they see a waiting state while initial data propagates (~24h real time). \n\n❓ Open Question: If we were in Draft status, launched externally, and returned without refreshing - do we see this page immediately or do we need to refresh?'
         },
         'gmail-mock': {
-            title: 'Step 5: Notification',
+            title: 'Step 5: Email: Data Arrived',
             desc: 'Simulating the asynchronous nature of ad networks. A notification brings the user back when meaningful data is available.'
         },
         'final-dashboard': {
-            title: 'Step 5: Analysis',
+            title: 'Step 6: Final Dashboard',
             desc: 'The loop is closed. The user is back in the platform viewing populated insights.\n\n❓ Open Question: Should we add a temporary banner (that disappears after a set time) indicating that data takes time to stabilize?'
+        },
+        'adform-pending': {
+            title: 'Adform Step 1: Campaign Pending',
+            desc: 'Campaign launched on Adform platform. Initial data collection is in progress.'
+        },
+        'adform-waiting-24h': {
+            title: 'Adform Step 2: Waiting (24h)',
+            desc: 'The campaign is syncing with the external network. Awaiting data population which typically takes up to 24 hours.'
+        },
+        'adform-email': {
+            title: 'Adform Step 3: Email Notification',
+            desc: 'Email notification alerting that Adform campaign data has arrived and is ready to view in the dashboard.'
+        },
+        'adform-dashboard': {
+            title: 'Adform Step 4: Performance Dashboard',
+            desc: 'View populated performance metrics and insights for your Adform campaign. The loop is closed with data flowing from the Adform platform.'
         }
     };
 

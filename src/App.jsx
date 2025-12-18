@@ -6,6 +6,10 @@ import TwitterTable from './screens/TwitterTable';
 import OptionB_CampaignPage from './screens/OptionB_CampaignPage';
 import GmailMock from './screens/GmailMock';
 import FinalDashboard from './screens/FinalDashboard';
+import AdformPending from './screens/AdformPending';
+import AdformWaiting24h from './screens/AdformWaiting24h';
+import AdformEmail from './screens/AdformEmail';
+import AdformDashboard from './screens/AdformDashboard';
 import Sidebar from './components/Sidebar';
 import InfoPanel from './components/InfoPanel';
 import BrowserWindow from './components/BrowserWindow';
@@ -24,6 +28,7 @@ function App() {
     const getUrlForStep = (s) => {
         if (s.includes('twitter')) return 'https://ads.twitter.com/campaigns/create';
         if (s.includes('gmail')) return 'https://mail.google.com/mail/u/0/#inbox';
+        if (s.includes('adform')) return 'https://adform.com/campaigns';
         return 'app.addressable.io/campaigns/post-launch-test';
     };
 
@@ -45,6 +50,14 @@ function App() {
                 return <GmailMock onOpenLink={() => setStep('final-dashboard')} />;
             case 'final-dashboard':
                 return <FinalDashboard onRestart={() => setStep('internal-start')} />;
+            case 'adform-pending':
+                return <AdformPending onNext={() => setStep('adform-waiting-24h')} />;
+            case 'adform-waiting-24h':
+                return <AdformWaiting24h onNext={() => setStep('adform-email')} />;
+            case 'adform-email':
+                return <AdformEmail onOpenLink={() => setStep('adform-dashboard')} />;
+            case 'adform-dashboard':
+                return <AdformDashboard onRestart={() => setStep('adform-pending')} />;
             default:
                 return <div>Unknown Step</div>;
         }

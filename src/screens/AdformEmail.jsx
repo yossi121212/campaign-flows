@@ -6,13 +6,13 @@ import {
     Square, CheckSquare, RotateCw, ArrowLeft, Image as ImageIcon
 } from 'lucide-react';
 
-const GmailMock = ({ onOpenLink }) => {
+const AdformEmail = ({ onOpenLink }) => {
     const [view, setView] = useState('list');
 
     // Mock Data
     const emails = [
         { id: 1, sender: 'Addressable', subject: 'Addressable: Your Campaign Started Collecting data!', snippet: 'Hi Queenb, Your campaign has started generating impressions...', time: '9:14 AM', read: false },
-        { id: 2, sender: 'X Ads Team', subject: 'Your campaign is now running', snippet: 'Your ads are now live on X...', time: 'Yesterday', read: true },
+        { id: 2, sender: 'Adform Team', subject: 'Your campaign is now running', snippet: 'Your ads are now live on Adform...', time: 'Yesterday', read: true },
         { id: 3, sender: 'Google Workspace', subject: 'Security alert', snippet: 'New sign-in detected on your account...', time: 'Dec 4', read: true },
     ];
 
@@ -146,7 +146,7 @@ const GmailMock = ({ onOpenLink }) => {
                                 </div>
 
 
-                                {/* FIGMA DESIGN IMPLEMENTATION - Same as AdformEmail */}
+                                {/* FIGMA DESIGN IMPLEMENTATION */}
                                 <div style={{
                                     width: '550px',
                                     background: '#FFFFFF',
@@ -226,7 +226,7 @@ const GmailMock = ({ onOpenLink }) => {
                                             onMouseOver={(e) => e.target.style.background = '#9C3DD0'}
                                             onMouseOut={(e) => e.target.style.background = '#B045E6'}
                                         >
-                                            View Campaign Data
+                                            View Adform Campaign Data
                                         </button>
 
                                         <div style={{ color: '#2D3142', fontSize: '14px', lineHeight: '24px', marginTop: '8px' }}>
@@ -289,4 +289,4 @@ const Tab = ({ icon: Icon, label, active }) => (
     </div>
 );
 
-export default GmailMock;
+export default AdformEmail;

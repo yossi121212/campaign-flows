@@ -1,13 +1,7 @@
 import {
     Download, Calendar, Info, Search, Columns, Maximize2, X, ChevronDown,
-    MoreHorizontal, HelpCircle, FileText, Play, Sparkles
+    MoreHorizontal, HelpCircle, FileText, Play, Sparkles, Monitor
 } from 'lucide-react';
-
-const XIcon = ({ size = 20, color = "currentColor", ...props }) => (
-    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" {...props}>
-        <path d="M18.901 3H22.5L14.643 11.985L23.886 24.202H16.645L10.975 16.79L4.485 24.202H0.885L9.273 14.606L0.413 3H7.854L13.001 9.802L18.901 3ZM17.638 22.046H19.632L6.77 5.047H4.631L17.638 22.046Z" fill={color} />
-    </svg>
-);
 
 const MetricCard = ({ label, value, subValue, subLabel, badge }) => (
     <div style={{ background: 'white', padding: '1.5rem', borderRadius: '8px', border: '1px solid #e2e8f0', flex: 1 }}>
@@ -26,7 +20,7 @@ const MetricCard = ({ label, value, subValue, subLabel, badge }) => (
     </div>
 );
 
-const FinalDashboard = ({ onRestart }) => {
+const AdformDashboard = ({ onRestart }) => {
     return (
         <div style={{ background: '#F2F7FB', minHeight: '100vh', padding: '0', fontFamily: 'Inter, sans-serif' }}>
 
@@ -36,7 +30,7 @@ const FinalDashboard = ({ onRestart }) => {
                 {/* Top Bar / Header */}
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', paddingTop: '1.5rem', paddingBottom: '1rem' }}>
                     <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', fontSize: '1.5rem', color: '#64748b' }}>
-                        <XIcon size={28} color="#0f172a" />
+                        <Monitor size={28} color="#0f172a" />
                         <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', letterSpacing: '-0.02em' }}>
                             <span style={{ color: '#0f172a', fontWeight: '400' }}>North America</span>
                             <span style={{ color: '#94a3b8', fontWeight: '300' }}>|</span>
@@ -213,7 +207,7 @@ const FinalDashboard = ({ onRestart }) => {
                                             <span style={{ fontSize: '0.7rem', color: '#8b5cf6', background: '#f3e8ff', padding: '2px 6px', borderRadius: '4px' }}>Preview Ad</span>
                                         </div>
                                     </td>
-                                    <td style={{ padding: '1rem', color: '#334155' }}>https://addressable.io?utm_source=x_twitter-...</td>
+                                    <td style={{ padding: '1rem', color: '#334155' }}>https://addressable.io?utm_source=adform...</td>
                                     <td style={{ padding: '1rem', color: '#334155' }}>{i === 1 ? '12K' : '16K'}</td>
                                     <td style={{ padding: '1rem', color: '#334155' }}>{i === 1 ? '33' : '99'}</td>
                                     <td style={{ padding: '1rem', color: '#334155' }}>{i === 1 ? '0.5%' : '0.11%'}</td>
@@ -229,4 +223,4 @@ const FinalDashboard = ({ onRestart }) => {
     );
 };
 
-export default FinalDashboard;
+export default AdformDashboard;

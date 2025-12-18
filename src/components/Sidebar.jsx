@@ -1,3 +1,4 @@
+import React from 'react';
 import { Layout, Twitter, Monitor, Clock, Mail, BarChart2, ChevronLeft, ChevronRight } from 'lucide-react';
 
 const XIcon = ({ size = 20, color = "currentColor", ...props }) => (
@@ -6,21 +7,56 @@ const XIcon = ({ size = 20, color = "currentColor", ...props }) => (
     </svg>
 );
 
+const RedditIcon = ({ size = 20, color = "#FF4500", ...props }) => (
+    <svg width={size} height={size} viewBox="0 0 16 16" fill={color} xmlns="http://www.w3.org/2000/svg" {...props}>
+        <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0m-3.828-1.165c-.315 0-.602.124-.812.325-.801-.573-1.9-.945-3.121-.993l.534-2.501 1.738.372a.83.83 0 1 0 .83-.869.83.83 0 0 0-.744.468l-1.938-.41a.2.2 0 0 0-.153.028.2.2 0 0 0-.086.134l-.592 2.788c-1.24.038-2.358.41-3.17.992-.21-.2-.496-.324-.81-.324a1.163 1.163 0 0 0-.478 2.224q-.03.17-.029.353c0 1.795 2.091 3.256 4.669 3.256s4.668-1.451 4.668-3.256c0-.114-.01-.238-.029-.353.401-.181.688-.592.688-1.069 0-.65-.525-1.165-1.165-1.165" />
+    </svg>
+);
+
 const Sidebar = ({ currentStep, setStep, isOpen, toggle }) => {
-    const steps = [
+    // Determine if we are in the X flow to keep it expanded
+    const isXFlow = [
+        'internal-start', 'twitter-launch', 'twitter-table',
+        'campaign-page', 'gmail-mock', 'final-dashboard'
+    ].includes(currentStep);
+
+    // Determine if we are in the Adform flow
+    const isAdformFlow = [
+        'adform-pending', 'adform-waiting-24h', 'adform-email', 'adform-dashboard'
+    ].includes(currentStep);
+
+    // State to toggle the "X" subgroup
+    // Default to open if we are currently in an X flow step
+    const [isXOpen, setIsXOpen] = React.useState(true);
+
+    // State to toggle the "Adform" subgroup
+    const [isAdformOpen, setIsAdformOpen] = React.useState(true);
+
+    // Use effect to ensure it stays open if we navigate to it from outside (future proofing)
+    React.useEffect(() => {
+        if (isXFlow) setIsXOpen(true);
+        if (isAdformFlow) setIsAdformOpen(true);
+    }, [currentStep, isXFlow, isAdformFlow]);
+
+    const xSteps = [
         { id: 'internal-start', label: '1. Post Launch Start', icon: Layout },
-        { type: 'header', label: '2. X (Process)', icon: XIcon },
-        { id: 'twitter-launch', label: 'Add Creative', icon: ChevronRight, indented: true },
-        { id: 'twitter-table', label: 'Campaigns Table', icon: Monitor, indented: true },
-        { type: 'divider' },
-        { id: 'campaign-page', label: '3. Waiting (24h)', icon: Clock },
-        { id: 'gmail-mock', label: '4. Email: Data Arrived', icon: Mail },
-        { id: 'final-dashboard', label: '5. Final Dashboard', icon: BarChart2 },
+        { id: 'twitter-launch', label: '2. Add Creative', icon: ChevronRight },
+        { id: 'twitter-table', label: '3. Campaigns Table', icon: Monitor },
+        { id: 'campaign-page', label: '4. Waiting (24h)', icon: Clock },
+        { id: 'gmail-mock', label: '5. Email: Data Arrived', icon: Mail },
+        { id: 'final-dashboard', label: '6. Final Dashboard', icon: BarChart2 },
+    ];
+
+    const adformSteps = [
+        { id: 'adform-pending', label: '1. Campaign Pending', icon: Clock },
+        { id: 'adform-waiting-24h', label: '2. Waiting (24h)', icon: Clock },
+        { id: 'adform-email', label: '3. Email: Data Arrived', icon: Mail },
+        { id: 'adform-dashboard', label: '4. Final Dashboard', icon: BarChart2 },
     ];
 
     return (
         <div style={{
-            width: isOpen ? '260px' : '60px',
+            width: isOpen ? '280px' : '60px', // Slightly wider for nested content
             background: 'white',
             borderRight: '1px solid #e2e8f0',
             display: 'flex',
@@ -33,9 +69,11 @@ const Sidebar = ({ currentStep, setStep, isOpen, toggle }) => {
             zIndex: 100,
             fontFamily: 'var(--font-family)',
             transition: 'width 0.3s ease',
-            overflow: 'hidden'
+            overflowY: 'auto',
+            overflowX: 'hidden'
         }}>
-            <div style={{ marginBottom: '2rem', display: 'flex', justifyContent: isOpen ? 'space-between' : 'center', alignItems: 'center', paddingLeft: isOpen ? '1rem' : 0 }}>
+            {/* Header / Toggle */}
+            <div style={{ marginBottom: '2rem', display: 'flex', justifyContent: isOpen ? 'space-between' : 'center', alignItems: 'center', paddingLeft: isOpen ? '0.5rem' : 0 }}>
                 {isOpen && (
                     <h2 style={{
                         color: '#0f172a',
@@ -56,94 +94,194 @@ const Sidebar = ({ currentStep, setStep, isOpen, toggle }) => {
             </div>
 
             <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem', alignItems: isOpen ? 'stretch' : 'center' }}>
-                {steps.map((s, i) => {
-                    if (s.type === 'divider') {
-                        return isOpen ? <div key={i} style={{ height: '1px', background: '#f1f5f9', margin: '0.5rem 0' }} /> : null;
-                    }
-                    if (s.type === 'header') {
-                        // Check if children are active to highlight parent in collapsed mode
-                        const isChildActive = ['twitter-launch', 'twitter-table'].includes(currentStep);
 
-                        if (!isOpen) {
-                            return (
-                                <button
-                                    key={i}
-                                    onClick={() => {
-                                        setStep('twitter-launch');
-                                        if (!isOpen) toggle(); // Open sidebar when clicked in collapsed state
-                                    }}
-                                    title={s.label}
-                                    style={{
-                                        background: isChildActive ? '#f7dcff' : 'transparent',
-                                        border: 'none',
-                                        borderRadius: '8px',
-                                        padding: '0.75rem',
-                                        color: isChildActive ? '#B045E6' : '#64748b',
-                                        cursor: 'pointer',
-                                        display: 'flex',
-                                        alignItems: 'center',
-                                        justifyContent: 'center',
-                                        transition: 'all 0.2s ease'
-                                    }}
-                                >
-                                    <s.icon size={20} />
-                                </button>
-                            );
-                        }
+                {/* Level 1: Post campaign launch flow */}
+                {isOpen && (
+                    <div style={{
+                        fontSize: '0.75rem',
+                        fontWeight: '700',
+                        color: '#94a3b8',
+                        textTransform: 'uppercase',
+                        letterSpacing: '0.5px',
+                        marginBottom: '0.5rem',
+                        paddingLeft: '0.5rem'
+                    }}>
+                        Post campaign launch flow
+                    </div>
+                )}
 
-                        return (
-                            <div
-                                key={i}
-                                onClick={() => setStep('twitter-launch')} // Selects the first sub-item
-                                style={{
-                                    fontSize: '0.90rem',
-                                    fontWeight: '400',
-                                    color: '#475569',
-                                    marginTop: '1rem',
-                                    marginBottom: '0.25rem',
-                                    display: 'flex',
-                                    alignItems: 'center',
-                                    gap: '0.75rem',
-                                    padding: '0 0.75rem',
-                                    cursor: 'pointer'
-                                }}>
-                                <s.icon size={18} /> {s.label}
+                {/* Level 2: X (Container for flow steps) */}
+                <div style={{ display: 'flex', flexDirection: 'column' }}>
+                    <button
+                        onClick={() => {
+                            if (!isOpen) {
+                                toggle();
+                                setIsXOpen(true);
+                                // Navigate to first X step when clicking while collapsed
+                                if (!isXFlow) {
+                                    setStep('internal-start');
+                                }
+                            } else {
+                                setIsXOpen(!isXOpen);
+                            }
+                        }}
+                        title="X (Twitter)"
+                        style={{
+                            background: isXFlow ? '#fdf4ff' : 'transparent',
+                            border: 'none',
+                            borderRadius: '8px',
+                            padding: '0.75rem',
+                            color: isXFlow ? '#B045E6' : '#475569',
+                            cursor: 'pointer',
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: isOpen ? 'space-between' : 'center',
+                            gap: '0.75rem',
+                            fontWeight: '600',
+                            transition: 'all 0.2s ease',
+                            fontSize: '0.95rem'
+                        }}
+                    >
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
+                            <XIcon size={20} />
+                            {isOpen && <span>X</span>}
+                        </div>
+                        {isOpen && (
+                            <div style={{ transform: isXOpen ? 'rotate(90deg)' : 'rotate(0deg)', transition: 'transform 0.2s' }}>
+                                <ChevronRight size={16} />
                             </div>
-                        );
-                    }
+                        )}
+                    </button>
 
-                    // Hide indented sub-items when sidebar is collapsed (Parent header takes over)
-                    if (!isOpen && s.indented) return null;
+                    {/* Level 3: X Flow Steps */}
+                    {isXOpen && (
+                        <div style={{
+                            display: 'flex',
+                            flexDirection: 'column',
+                            gap: '0.25rem',
+                            marginTop: '0.25rem',
+                            paddingLeft: isOpen ? '0' : '0'
+                        }}>
+                            {xSteps.map((s) => {
+                                const isActive = currentStep === s.id;
+                                if (!isOpen && !isActive) return null; // In collapsed mode, maybe show only active or hover? simplified for now.
 
-                    const isActive = currentStep === s.id;
-                    return (
-                        <button
-                            key={s.id}
-                            onClick={() => setStep(s.id)}
-                            title={!isOpen ? s.label : ''}
-                            style={{
-                                background: isActive ? '#f7dcff' : 'transparent', // Light version of B045E6
-                                border: 'none',
-                                borderRadius: '8px',
-                                padding: isOpen ? (s.indented ? '0.6rem 0.6rem 0.6rem 3.5rem' : '0.75rem') : '0.75rem', // Increased indentation
-                                color: isActive ? '#B045E6' : '#64748b',
-                                textAlign: 'left',
-                                cursor: 'pointer',
-                                display: 'flex',
-                                alignItems: 'center',
-                                justifyContent: isOpen ? 'flex-start' : 'center',
-                                gap: '0.75rem',
-                                fontWeight: isActive ? '600' : '500',
-                                transition: 'all 0.2s ease',
-                                fontSize: s.indented ? '0.9rem' : '0.95rem'
-                            }}
-                        >
-                            {!s.indented && <s.icon size={20} />}
-                            {/* No icon for indented items */}
-                            {isOpen && <span style={{ whiteSpace: 'nowrap' }}>{s.label}</span>}
-                        </button>
-                    );
-                })}
+                                return (
+                                    <button
+                                        key={s.id}
+                                        onClick={() => setStep(s.id)}
+                                        title={!isOpen ? s.label : ''}
+                                        style={{
+                                            background: isActive ? '#f7dcff' : 'transparent',
+                                            border: 'none',
+                                            borderRadius: '8px',
+                                            // Deep indentation for Level 3
+                                            padding: isOpen ? '0.6rem 0.6rem 0.6rem 3rem' : '0.75rem',
+                                            color: isActive ? '#B045E6' : '#64748b',
+                                            textAlign: 'left',
+                                            cursor: 'pointer',
+                                            display: 'flex',
+                                            alignItems: 'center',
+                                            justifyContent: isOpen ? 'flex-start' : 'center',
+                                            gap: '0.75rem',
+                                            fontWeight: isActive ? '600' : '500',
+                                            transition: 'all 0.2s ease',
+                                            fontSize: '0.9rem'
+                                        }}
+                                    >
+                                        {!isOpen ? <s.icon size={20} /> : <span>{s.label}</span>}
+                                    </button>
+                                );
+                            })}
+                        </div>
+                    )}
+                </div>
+
+                {/* Level 2: Adform (Active Flow) */}
+                <div style={{ display: 'flex', flexDirection: 'column' }}>
+                    <button
+                        onClick={() => {
+                            if (!isOpen) {
+                                toggle();
+                                setIsAdformOpen(true);
+                                // Navigate to first Adform step when clicking while collapsed
+                                if (!isAdformFlow) {
+                                    setStep('adform-pending');
+                                }
+                            } else {
+                                setIsAdformOpen(!isAdformOpen);
+                            }
+                        }}
+                        title="Adform"
+                        style={{
+                            background: isAdformFlow ? '#fdf4ff' : 'transparent',
+                            border: 'none',
+                            borderRadius: '8px',
+                            padding: '0.75rem',
+                            color: isAdformFlow ? '#B045E6' : '#475569',
+                            cursor: 'pointer',
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: isOpen ? 'space-between' : 'center',
+                            gap: '0.75rem',
+                            fontWeight: '500',
+                            fontSize: '0.95rem'
+                        }}
+                    >
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
+                            <Monitor size={20} />
+                            {isOpen && <span>Adform</span>}
+                        </div>
+                        {isOpen && (
+                            <div style={{ transform: isAdformOpen ? 'rotate(90deg)' : 'rotate(0deg)', transition: 'transform 0.2s' }}>
+                                <ChevronRight size={16} />
+                            </div>
+                        )}
+                    </button>
+
+                    {/* Level 3: Adform Flow Steps */}
+                    {isAdformOpen && (
+                        <div style={{
+                            display: 'flex',
+                            flexDirection: 'column',
+                            gap: '0.25rem',
+                            marginTop: '0.25rem',
+                            paddingLeft: isOpen ? '0' : '0'
+                        }}>
+                            {adformSteps.map((s) => {
+                                const isActive = currentStep === s.id;
+                                if (!isOpen && !isActive) return null;
+
+                                return (
+                                    <button
+                                        key={s.id}
+                                        onClick={() => setStep(s.id)}
+                                        title={!isOpen ? s.label : ''}
+                                        style={{
+                                            background: isActive ? '#f7dcff' : 'transparent',
+                                            border: 'none',
+                                            borderRadius: '8px',
+                                            padding: isOpen ? '0.6rem 0.6rem 0.6rem 3rem' : '0.75rem',
+                                            color: isActive ? '#B045E6' : '#64748b',
+                                            textAlign: 'left',
+                                            cursor: 'pointer',
+                                            display: 'flex',
+                                            alignItems: 'center',
+                                            justifyContent: isOpen ? 'flex-start' : 'center',
+                                            gap: '0.75rem',
+                                            fontWeight: isActive ? '600' : '500',
+                                            transition: 'all 0.2s ease',
+                                            fontSize: '0.9rem'
+                                        }}
+                                    >
+                                        {!isOpen ? <s.icon size={20} /> : <span>{s.label}</span>}
+                                    </button>
+                                );
+                            })}
+                        </div>
+                    )}
+                </div>
+
             </div>
         </div>
     );
